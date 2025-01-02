@@ -31,7 +31,7 @@ from transformers import (
     Seq2SeqTrainingArguments, AutoConfig,
 )
 from transformers import DataCollatorForSeq2Seq as _DataCollatorForSeq2Seq
-
+from modelscope import AutoTokenizer, AutoModel, snapshot_download
 from transformers import Seq2SeqTrainer as _Seq2SeqTrainer
 
 ModelType = Union[PreTrainedModel, PeftModelForCausalLM]
@@ -385,6 +385,7 @@ def load_tokenizer_and_model(
         model_dir: str,
         peft_config: Optional[PeftConfig] = None,
 ) -> tuple[PreTrainedTokenizer, nn.Module]:
+    model_dir = snapshot_download("ZhipuAI/chatglm3-6b", revision = "v1.0.0")
     tokenizer = AutoTokenizer.from_pretrained(model_dir, trust_remote_code=True)
     if peft_config is not None:
         if peft_config.peft_type.name == "PREFIX_TUNING":
